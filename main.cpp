@@ -5,11 +5,18 @@
 
 #include <FelgoApplication>
 
+#include <maincontroller.h>
+
 // uncomment this line to add the Live Client Module and use live reloading with your custom C++ code
 //#include <FelgoLiveClient>
 
 int main(int argc, char *argv[])
 {
+    // registering types
+    qmlRegisterUncreatableType<MainController>("Controllers", 1, 0, "MainController",
+                                               "MainController is created in C++");
+
+    // application
     QApplication app(argc, argv);
 
     FelgoApplication felgo;
@@ -34,6 +41,11 @@ int main(int argc, char *argv[])
     // also see the .pro file for more details
     //felgo.setMainQmlFileName(QStringLiteral("qrc:/qml/Main.qml"));
 
+    // add maincontroller
+    MainController mainController;
+    engine.rootContext()->setContextProperty("mainController", &mainController);
+
+    // load main qml file
     engine.load(QUrl(felgo.mainQmlFileName()));
 
     // to start your project as Live Client, comment (remove) the lines "felgo.setMainQmlFileName ..." & "engine.load ...",

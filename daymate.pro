@@ -38,7 +38,13 @@ DEPLOYMENTFOLDERS += assetsFolder
 
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    src/maincontroller.cpp
+
+HEADERS += \
+    src/maincontroller.h
+
+INCLUDEPATH += src
 
 FELGO_PLUGINS += admob
 
