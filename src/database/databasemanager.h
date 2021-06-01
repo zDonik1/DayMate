@@ -6,18 +6,9 @@
 
 #pragma once
 
-#include <QObject>
-
-#include "database/databasemanager.h"
-
-class MainController : public QObject
+class DatabaseManager
 {
-    Q_OBJECT
-
 public:
-    explicit MainController(QObject *parent = nullptr);
-
-private:
-    DatabaseManager m_databaseManager;
+    DatabaseManager();
 };
 
