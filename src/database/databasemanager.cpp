@@ -11,9 +11,14 @@
 #include <QDir>
 #include <QDebug>
 
+#include "tododao.h"
+
 DatabaseManager::DatabaseManager()
 {
     setupDatabase();
+
+    // registering daos
+    registerDao<TodoDao>();
 }
 
 void DatabaseManager::setupDatabase()

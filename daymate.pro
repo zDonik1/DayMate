@@ -41,12 +41,14 @@ DEPLOYMENTFOLDERS += assetsFolder
 SOURCES += main.cpp \
     src/database/abstractdao.cpp \
     src/database/databasemanager.cpp \
+    src/database/tododao.cpp \
     src/globals.cpp \
     src/maincontroller.cpp
 
 HEADERS += \
     src/database/abstractdao.h \
     src/database/databasemanager.h \
+    src/database/tododao.h \
     src/globals.h \
     src/maincontroller.h
 
