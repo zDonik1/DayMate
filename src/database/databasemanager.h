@@ -28,6 +28,8 @@ private:
         m_daos.emplace(dao->id(), std::move(dao));
     }
 
+    void setupDatabase();
+
 private:
     std::unordered_map<DaoIdType, std::unique_ptr<AbstractDao>> m_daos;
 };
