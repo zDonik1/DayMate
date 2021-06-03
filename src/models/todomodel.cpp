@@ -27,6 +27,18 @@ void TodoModel::add(const Todo &todo)
     endInsertRows();
 }
 
+void TodoModel::remove(int index)
+{
+    beginRemoveRows({}, index, index);
+    m_todos.removeAt(index);
+    endRemoveRows();
+}
+
+const Todo &TodoModel::get(int index) const
+{
+    return m_todos.at(index);
+}
+
 int TodoModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return m_todos.size();

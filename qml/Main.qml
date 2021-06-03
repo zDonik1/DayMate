@@ -14,6 +14,8 @@ App {
         id: logic
 
         onAddTodo: mainController.todoController.addTodo(text)
+        onEditTodo: mainController.todoController.editTodo(index, text)
+        onRemoveTodo: mainController.todoController.removeTodo(index)
     }
 
     // view
@@ -45,9 +47,14 @@ App {
         function openAddTodoDialog() {
             InputDialog.inputTextSingleLine(app, qsTr("Add Todo"), qsTr("Todo text"),
                                             function(ok, text) {
-                                                if (ok) {
-                                                    logic.addTodo(text)
-                                                }
+                                                if (ok) logic.addTodo(text)
+                                            })
+        }
+
+        function openEditTodoDialog(index, text) {
+            InputDialog.inputTextSingleLine(app, qsTr("Edit Todo"), text,
+                                            function(ok, text) {
+                                                if (ok) logic.editTodo(index, text)
                                             })
         }
     }

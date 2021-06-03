@@ -20,6 +20,9 @@ public:
 
     void setupModel();
     void add(const Todo &todo);
+    void remove(int index);
+
+    const Todo &get(int index) const;
 
     int rowCount(const QModelIndex &parent = {}) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

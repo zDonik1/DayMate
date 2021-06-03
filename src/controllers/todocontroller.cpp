@@ -21,9 +21,27 @@ TodoModel *TodoController::todoModel()
 void TodoController::addTodo(const QString &todoText)
 {
     // adding into database
-    auto todoDao = m_databaseManager.getDao<TodoDao>();
-    auto newTodo = todoDao.add({ "", todoText });
+    const auto newTodo = m_databaseManager.getDao<TodoDao>().add({ "", todoText });
 
     // adding to model
     m_todoModel.add(newTodo);
+}
+
+void TodoController::editTodo(int index, const QString &todoText)
+{
+    // editing in database
+    const auto &todo = m_todoModel.get(index);
+    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todoText});
+
+    // editing in model
+    m_todoModel.setData(m_todoModel.index(index), todoText, Qt::DisplayRole);
+}
+
+void TodoController::removeTodo(int index)
+{
+    // removing in database
+    m_databaseManager.getDao<TodoDao>().remove(m_todoModel.get(index).uuid);
+
+    // removing in model
+    m_todoModel.remove(index);
 }
