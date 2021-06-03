@@ -1,6 +1,9 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.12
 
 import Felgo 3.0
+
+import "../components"
 
 Page {
     id: page
@@ -8,9 +11,9 @@ Page {
 
     AppListView {
         anchors.fill: parent
-//        model: listModel
-        delegate: SimpleRow {
-            text: qsTr("some todo")
+        model: mainController.todoController.todoModel
+        delegate: TodoDelegate {
+            text: display
         }
     }
 }
