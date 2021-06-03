@@ -16,6 +16,14 @@ class DatabaseManager
 public:
     DatabaseManager();
 
+    template<class DaoType>
+    const DaoType &getDao() const
+    {
+        if constexpr (std::is_base_of_v<AbstractDao, DaoType>) {
+            return *dynamic_cast<DaoType *>(m_daos.at(DaoType::id()).get());
+        }
+    }
+
 private:
     template<class DaoType>
     void registerDao()
