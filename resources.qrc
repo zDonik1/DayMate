@@ -1,9 +1,16 @@
 <RCC>
     <qresource prefix="/">
-        <file>assets</file>
-        <file>qml</file>
-        <file>qml/logic</file>
-        <file>qml/model</file>
-        <file>qml/pages</file>
+        <file>assets/code-admob.png</file>
+        <file>assets/code-ga.png</file>
+        <file>assets/felgo-logo.png</file>
+        <file>assets/logo-admob.png</file>
+        <file>assets/logo-ga.png</file>
+        <file>qml/components/TodoDelegate.qml</file>
+        <file>qml/helper/Constants.qml</file>
+        <file>qml/helper/qmldir</file>
+        <file>qml/logic/Logic.qml</file>
+        <file>qml/pages/TodoListPage.qml</file>
+        <file>qml/config.json</file>
+        <file>qml/Main.qml</file>
     </qresource>
 </RCC>
