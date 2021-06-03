@@ -17,6 +17,10 @@ AbstractDao::AbstractDao()
     m_id = getUniqueId();
 }
 
+AbstractDao::~AbstractDao()
+{
+}
+
 DaoIdType AbstractDao::id()
 {
     return m_id;

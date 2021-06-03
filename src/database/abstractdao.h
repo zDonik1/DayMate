@@ -15,12 +15,13 @@ class AbstractDao
 {
 public:
     AbstractDao();
+    virtual ~AbstractDao();
 
     static DaoIdType id();
 
 protected:
     std::pair<bool, QSqlQuery> executeQuery(const QString &queryStr) const;
 
-protected:
+private:
     static DaoIdType m_id;
 };
