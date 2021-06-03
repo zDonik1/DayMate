@@ -43,14 +43,16 @@ SOURCES += main.cpp \
     src/database/databasemanager.cpp \
     src/database/tododao.cpp \
     src/globals.cpp \
-    src/maincontroller.cpp
+    src/maincontroller.cpp \
+    src/models/todomodel.cpp
 
 HEADERS += \
     src/database/abstractdao.h \
     src/database/databasemanager.h \
     src/database/tododao.h \
     src/globals.h \
-    src/maincontroller.h
+    src/maincontroller.h \
+    src/models/todomodel.h
 
 INCLUDEPATH += src
 
