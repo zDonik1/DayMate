@@ -19,6 +19,7 @@ public:
     explicit TodoModel(const TodoDao &todoDao, QObject *parent = nullptr);
 
     void setupModel();
+    void add(const Todo &todo);
 
     int rowCount(const QModelIndex &parent = {}) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

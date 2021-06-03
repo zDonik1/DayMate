@@ -24,11 +24,13 @@ TodoDao::TodoDao()
     }
 }
 
-bool TodoDao::add(const Todo &todo) const
+Todo TodoDao::add(const Todo &todo) const
 {
-    return executeQuery(QString("insert into %1 (uuid, todo) values('%2', '%3')")
-                        .arg(TABLE, QUuid::createUuid().toString(QUuid::WithoutBraces),
-                             todo.text)).first;
+    const auto uuid = QUuid::createUuid();
+    auto success = executeQuery(QString("insert into %1 (uuid, todo) values('%2', '%3')")
+                                .arg(TABLE, uuid.toString(QUuid::WithoutBraces),
+                                     todo.text)).first;
+    return success ? Todo{ uuid, todo.text } : Todo{};
 }
 
 bool TodoDao::edit(const Todo &todo) const

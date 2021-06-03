@@ -20,7 +20,8 @@ class TodoDao : public AbstractDao
 public:
     TodoDao();
 
-    bool add(const Todo &todo) const;
+    // returns new todo with added uuid
+    Todo add(const Todo &todo) const;
     bool edit(const Todo &todo) const;
     bool remove(const QUuid &uuid) const;
     QList<Todo> get() const;

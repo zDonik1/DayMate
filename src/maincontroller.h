@@ -8,7 +8,6 @@
 
 #include <QObject>
 
-#include "database/databasemanager.h"
 #include "controllers/todocontroller.h"
 
 class MainController : public QObject

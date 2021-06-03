@@ -8,6 +8,7 @@
 
 #include <QObject>
 
+#include "database/databasemanager.h"
 #include <models/todomodel.h>
 
 class TodoController : public QObject
@@ -17,11 +18,15 @@ class TodoController : public QObject
     Q_PROPERTY(TodoModel *todoModel READ todoModel CONSTANT)
 
 public:
-    explicit TodoController(const TodoDao &todoDao, QObject *parent = nullptr);
+    explicit TodoController(DatabaseManager &dbManager, QObject *parent = nullptr);
 
     TodoModel *todoModel();
 
+public slots:
+    void addTodo(const QString &todoText);
+
 private:
+    DatabaseManager &m_databaseManager;
     TodoModel m_todoModel;
 };
 

@@ -20,6 +20,13 @@ void TodoModel::setupModel()
     endResetModel();
 }
 
+void TodoModel::add(const Todo &todo)
+{
+    beginInsertRows({}, rowCount(), rowCount());
+    m_todos.append(todo);
+    endInsertRows();
+}
+
 int TodoModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return m_todos.size();

@@ -8,7 +8,7 @@
 
 MainController::MainController(QObject *parent)
     : QObject(parent)
-    , m_todoController(m_databaseManager.getDao<TodoDao>())
+    , m_todoController(m_databaseManager)
 {
 }
 
