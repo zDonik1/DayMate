@@ -4,15 +4,15 @@
  *
  ****************************************************************************/
 
-#include "maincontroller.h"
+#include "todocontroller.h"
 
-MainController::MainController(QObject *parent)
+TodoController::TodoController(const TodoDao &todoDao, QObject *parent)
     : QObject(parent)
-    , m_todoController(m_databaseManager.getDao<TodoDao>())
+    , m_todoModel(todoDao)
 {
 }
 
-TodoController *MainController::todoController()
+TodoModel *TodoController::todoModel()
 {
-    return &m_todoController;
+    return &m_todoModel;
 }

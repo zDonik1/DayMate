@@ -15,6 +15,11 @@ int main(int argc, char *argv[])
     // registering types
     qmlRegisterUncreatableType<MainController>("Controllers", 1, 0, "MainController",
                                                "MainController is created in C++");
+    qmlRegisterUncreatableType<TodoController>("Controllers", 1, 0, "TodoController",
+                                               "TodoController is created in C++");
+
+    qmlRegisterUncreatableType<TodoModel>("Models", 1, 0, "TodoModel",
+                                          "TodoModel is created in C++");
 
     // application
     QApplication app(argc, argv);

@@ -39,6 +39,7 @@ DEPLOYMENTFOLDERS += assetsFolder
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    src/controllers/todocontroller.cpp \
     src/database/abstractdao.cpp \
     src/database/databasemanager.cpp \
     src/database/tododao.cpp \
@@ -47,6 +48,7 @@ SOURCES += main.cpp \
     src/models/todomodel.cpp
 
 HEADERS += \
+    src/controllers/todocontroller.h \
     src/database/abstractdao.h \
     src/database/databasemanager.h \
     src/database/tododao.h \
