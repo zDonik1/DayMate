@@ -9,6 +9,13 @@ import "helper"
 App {
     id: app
 
+    onInitTheme: {
+        Theme.colors.tintColor = "#0f2a62"
+        Theme.colors.textColor = "#d8efc9"
+        Theme.colors.backgroundColor = "#0c2351"
+        Theme.navigationBar.titleColor = Theme.textColor
+    }
+
     // business logic
     Logic {
         id: logic
@@ -21,6 +28,7 @@ App {
     // view
     Navigation {
         id: navigation
+        navigationMode: navigationModeTabs
 
         // first tab
         NavigationItem {
@@ -30,7 +38,6 @@ App {
             NavigationStack {
                 navigationBar.rightBarItem: IconButtonBarItem {
                     icon: IconType.plus
-                    color: Theme.backgroundColor
 
                     onClicked: helper.openAddTodoDialog()
                 }
