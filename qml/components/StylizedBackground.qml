@@ -6,6 +6,7 @@ import Felgo 3.0
 Item {
     property int radius: dp(30)
     property int lineWidth: dp(3)
+    property int elevation: 1
 
     id: root
 
@@ -13,8 +14,8 @@ Item {
         anchors.fill: canvas
         source: canvas
 
-        radius: 15
-        samples: 10
+        radius: 3 * elevation
+        samples: 2 * elevation
         verticalOffset: 5
         color: "black"
     }
@@ -26,7 +27,7 @@ Item {
         implicitWidth: parent.width + lineWidth * 2
         onPaint: {
             var ctx = getContext("2d")
-            ctx.fillStyle = Theme.tintColor
+            ctx.fillStyle = Theme.secondaryBackgroundColor
             ctx.strokeStyle = Theme.textColor
             ctx.lineWidth = lineWidth
 

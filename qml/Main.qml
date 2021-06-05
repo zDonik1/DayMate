@@ -11,10 +11,11 @@ App {
     id: app
 
     onInitTheme: {
-        Theme.colors.tintColor = "#0f2a62"
+        Theme.colors.tintColor = "#34495e"
         Theme.colors.textColor = "#d8efc9"
         Theme.colors.secondaryTextColor = "#a2acad"
-        Theme.colors.backgroundColor = "#0c2351"
+        Theme.colors.backgroundColor = "#2c3e50"
+        Theme.colors.secondaryBackgroundColor = "#34495e"
         Theme.navigationBar.titleColor = Theme.textColor
     }
 

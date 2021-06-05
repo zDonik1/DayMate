@@ -9,9 +9,12 @@ Item {
     property int verticalMargins: dp(20)
 
     id: root
-    anchors.centerIn: parent
+    anchors {
+        centerIn: parent
+        horizontalCenterOffset: -dp(4)
+    }
     height: textEdit.contentHeight + verticalMargins * 2
-    width: dp(300)
+    width: parent.width * 0.9
     visible: false
 
     // background press catches
@@ -37,17 +40,19 @@ Item {
         anchors.centerIn: parent
         height: parent.height
         width: parent.width
+        elevation: 30
     }
 
     AppTextEdit {
         id: textEdit
         anchors {
             centerIn: parent
-            verticalCenterOffset: dp(2)
+            verticalCenterOffset: dp(4)
         }
-        width: parent.width * 0.8
+        width: parent.width * 0.85
         wrapMode: TextEdit.Wrap
         color: Theme.textColor
+        font.pixelSize: sp(22)
         placeholderText: qsTr("Write todo here...")
         placeholderColor: Theme.secondaryTextColor
     }
