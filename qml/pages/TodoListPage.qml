@@ -16,4 +16,6 @@ Page {
             text: display
         }
     }
+
+    TodoCard {}
 }
