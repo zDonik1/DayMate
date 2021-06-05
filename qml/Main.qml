@@ -5,6 +5,7 @@ import Felgo 3.0
 import "logic"
 import "pages"
 import "helper"
+import "components"
 
 App {
     id: app
@@ -12,6 +13,7 @@ App {
     onInitTheme: {
         Theme.colors.tintColor = "#0f2a62"
         Theme.colors.textColor = "#d8efc9"
+        Theme.colors.secondaryTextColor = "#a2acad"
         Theme.colors.backgroundColor = "#0c2351"
         Theme.navigationBar.titleColor = Theme.textColor
     }
@@ -39,11 +41,15 @@ App {
                 navigationBar.rightBarItem: IconButtonBarItem {
                     icon: IconType.plus
 
-                    onClicked: helper.openAddTodoDialog()
+                    onClicked: todoCard.open()
                 }
 
                 splitView: tablet // use side-by-side view on tablets
-                initialPage: TodoListPage {}
+                initialPage: TodoListPage {
+                    TodoCard {
+                        id: todoCard
+                    }
+                }
             }
         }
     }

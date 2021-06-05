@@ -1,12 +1,36 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
 import Felgo 3.0
 
 Item {
+    function open () { visible = true }
+    function close () { visible = false }
+
+    property int verticalMargins: dp(20)
+
     anchors.centerIn: parent
-    height: dp(100)
+    height: textEdit.contentHeight + verticalMargins * 2
     width: dp(300)
+    visible: false
+
+    // background press catches
+    Item {
+        anchors.centerIn: parent
+        height: page.height
+        width: page.width
+
+        TapHandler {
+            onTapped: {
+                textEdit.focus = false
+                if (textEdit.text !== "") {
+                    logic.addTodo(textEdit.text)
+                    textEdit.text = ""
+                }
+                close()
+            }
+        }
+    }
 
     DropShadow {
         anchors.fill: card
@@ -52,5 +76,18 @@ Item {
 
             ctx.fill()
         }
+    }
+
+    AppTextEdit {
+        id: textEdit
+        anchors {
+            centerIn: parent
+            verticalCenterOffset: dp(2)
+        }
+        width: parent.width * 0.8
+        wrapMode: TextEdit.Wrap
+        color: Theme.textColor
+        placeholderText: qsTr("Write todo here...")
+        placeholderColor: Theme.secondaryTextColor
     }
 }
