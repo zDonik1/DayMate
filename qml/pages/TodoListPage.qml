@@ -46,7 +46,7 @@ Page {
                         listView.currentItem.finalizeAdd()
                         listView.itemBeingAdded = false
                     } else {
-                        listView.currentItem.deselect()
+                        listView.currentItem.onDeselected()
                     }
                     listView.currentIndex = -1
                 }

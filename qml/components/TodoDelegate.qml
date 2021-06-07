@@ -7,12 +7,18 @@ FocusScope {
         appTextEdit.focus = false
         if (appTextEdit.text !== "") {
             logic.editTodo(index, appTextEdit.text)
+        } else {
+            logic.removeTodo(index)
         }
     }
 
-    function deselect() {
-        focus = false
-        appTextEdit.focus = false
+    function onDeselected() {
+        if (appTextEdit.text === "") {
+            logic.removeTodo(index)
+        } else {
+            focus = false
+            appTextEdit.focus = false
+        }
     }
 
     property bool selected: false
