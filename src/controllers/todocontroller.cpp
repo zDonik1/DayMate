@@ -20,17 +20,11 @@ TodoModel *TodoController::todoModel()
 
 void TodoController::addTodo()
 {
-    // adding to model
-    m_todoModel.add({});
-}
-
-void TodoController::updateAddedTodo(int index, const QString &todoText)
-{
     // adding into database
-    const auto newTodo = m_databaseManager.getDao<TodoDao>().add({ "", todoText });
+    const auto newTodo = m_databaseManager.getDao<TodoDao>().add({});
 
-    // updating model
-    m_todoModel.update(index, newTodo);
+    // adding to model
+    m_todoModel.add(newTodo);
 }
 
 void TodoController::editTodo(int index, const QString &todoText)

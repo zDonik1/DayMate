@@ -6,7 +6,7 @@ FocusScope {
     function finalizeAdd() {
         appTextEdit.focus = false
         if (appTextEdit.text !== "") {
-            logic.updateAddedTodo(index, appTextEdit.text)
+            logic.editTodo(index, appTextEdit.text)
         }
     }
 

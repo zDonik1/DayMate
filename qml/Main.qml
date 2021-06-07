@@ -24,7 +24,6 @@ App {
         id: logic
 
         onAddTodo: mainController.todoController.addTodo()
-        onUpdateAddedTodo: mainController.todoController.updateAddedTodo(index, text)
         onEditTodo: mainController.todoController.editTodo(index, text)
         onRemoveTodo: mainController.todoController.removeTodo(index)
     }
@@ -51,24 +50,6 @@ App {
                     id: todoListPage
                 }
             }
-        }
-    }
-
-    QtObject {
-        id: helper
-
-        function openAddTodoDialog() {
-            InputDialog.inputTextSingleLine(app, qsTr("Add Todo"), qsTr("Todo text"),
-                                            function(ok, text) {
-                                                if (ok) logic.addTodo(text)
-                                            })
-        }
-
-        function openEditTodoDialog(index, text) {
-            InputDialog.inputTextSingleLine(app, qsTr("Edit Todo"), text,
-                                            function(ok, text) {
-                                                if (ok) logic.editTodo(index, text)
-                                            })
         }
     }
 }

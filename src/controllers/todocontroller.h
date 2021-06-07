@@ -24,7 +24,6 @@ public:
 
 public slots:
     void addTodo();
-    void updateAddedTodo(int index, const QString &todoText);
     void editTodo(int index, const QString &todoText);
     void removeTodo(int index);
 
