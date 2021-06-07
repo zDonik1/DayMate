@@ -34,6 +34,12 @@ void TodoModel::remove(int index)
     endRemoveRows();
 }
 
+void TodoModel::update(int index, const Todo &todo)
+{
+    m_todos[index] = todo;
+    dataChanged(createIndex(index, 0), createIndex(index, 0), { Qt::DisplayRole });
+}
+
 const Todo &TodoModel::get(int index) const
 {
     return m_todos.at(index);

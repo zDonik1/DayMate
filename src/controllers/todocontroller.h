@@ -23,7 +23,8 @@ public:
     TodoModel *todoModel();
 
 public slots:
-    void addTodo(const QString &todoText);
+    void addTodo();
+    void updateAddedTodo(int index, const QString &todoText);
     void editTodo(int index, const QString &todoText);
     void removeTodo(int index);
 

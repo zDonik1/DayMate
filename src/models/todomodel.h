@@ -21,6 +21,7 @@ public:
     void setupModel();
     void add(const Todo &todo);
     void remove(int index);
+    void update(int index, const Todo &todo);
 
     const Todo &get(int index) const;
 

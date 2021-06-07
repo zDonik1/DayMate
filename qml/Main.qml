@@ -23,7 +23,8 @@ App {
     Logic {
         id: logic
 
-        onAddTodo: mainController.todoController.addTodo(text)
+        onAddTodo: mainController.todoController.addTodo()
+        onUpdateAddedTodo: mainController.todoController.updateAddedTodo(index, text)
         onEditTodo: mainController.todoController.editTodo(index, text)
         onRemoveTodo: mainController.todoController.removeTodo(index)
     }
@@ -42,14 +43,12 @@ App {
                 navigationBar.rightBarItem: IconButtonBarItem {
                     icon: IconType.plus
 
-                    onClicked: todoCard.open()
+                    onClicked: todoListPage.addTodo()
                 }
 
                 splitView: tablet // use side-by-side view on tablets
                 initialPage: TodoListPage {
-                    TodoCard {
-                        id: todoCard
-                    }
+                    id: todoListPage
                 }
             }
         }
