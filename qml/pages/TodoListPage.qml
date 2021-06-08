@@ -43,11 +43,9 @@ Page {
                 anchors.fill: parent
                 onPressed: {
                     if (listView.itemBeingAdded) {
-                        listView.currentItem.finalizeAdd()
                         listView.itemBeingAdded = false
-                    } else {
-                        listView.currentItem.onDeselected()
                     }
+                    listView.currentItem.onDeselected()
                     listView.currentIndex = -1
                 }
             }

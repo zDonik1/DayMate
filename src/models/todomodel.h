@@ -21,13 +21,15 @@ public:
     void setupModel();
     void add(const Todo &todo);
     void remove(int index);
-    void update(int index, const Todo &todo);
 
     const Todo &get(int index) const;
 
     int rowCount(const QModelIndex &parent = {}) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+
+private:
+    int convertReverseIndex(int index) const;
 
 private:
     const TodoDao &m_todoDao;

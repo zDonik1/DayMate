@@ -3,21 +3,13 @@ import QtQuick 2.15
 import Felgo 3.0
 
 FocusScope {
-    function finalizeAdd() {
-        appTextEdit.focus = false
-        if (appTextEdit.text !== "") {
-            logic.editTodo(index, appTextEdit.text)
-        } else {
-            logic.removeTodo(index)
-        }
-    }
-
     function onDeselected() {
+        focus = false
+        appTextEdit.focus = false
         if (appTextEdit.text === "") {
             logic.removeTodo(index)
         } else {
-            focus = false
-            appTextEdit.focus = false
+            logic.editTodo(index, appTextEdit.text)
         }
     }
 
