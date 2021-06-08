@@ -16,6 +16,7 @@ App {
         Theme.colors.secondaryTextColor = "#a2acad"
         Theme.colors.backgroundColor = "#2c3e50"
         Theme.colors.secondaryBackgroundColor = "#34495e"
+        Theme.colors.inputCursorColor = "#a2acad"
         Theme.navigationBar.titleColor = Theme.textColor
     }
 
