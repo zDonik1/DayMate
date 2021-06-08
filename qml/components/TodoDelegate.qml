@@ -4,7 +4,6 @@ import Felgo 3.0
 
 FocusScope {
     function onDeselected() {
-        focus = false
         appTextEdit.focus = false
         if (appTextEdit.text === "") {
             logic.removeTodo(index)
@@ -26,8 +25,7 @@ FocusScope {
     scale: selected ? 1.03 : 1
 
     ListView.onAdd: {
-        appTextEdit.focus = true
-        focus = true
+        appTextEdit.forceActiveFocus()
         Qt.callLater(function () { listView.currentIndex = index })
     }
 
