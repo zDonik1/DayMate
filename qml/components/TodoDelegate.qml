@@ -18,9 +18,9 @@ FocusScope {
     property int spacing: dp(15)
 
     id: root
-    anchors.horizontalCenter: parent.horizontalCenter
     height: background.height + spacing
     width: parent.width * 0.9
+    x: (parent.width - width) / 2
     z: selected ? 1 : -1
     scale: selected ? 1.03 : 1
 

@@ -31,6 +31,28 @@ Page {
             selected: ListView.isCurrentItem
         }
 
+        // transitions
+        add: Transition {
+            NumberAnimation {
+                properties: "x"
+                from: page.width
+                duration: 100
+            }
+        }
+        displaced: Transition {
+            NumberAnimation {
+                properties: "y"
+                duration: 100
+            }
+        }
+        remove: Transition {
+            NumberAnimation {
+                properties: "x"
+                to: page.width
+                duration: 50
+            }
+        }
+
         Rectangle {
             width: listView.width
             height: Math.max(listView.height, parent.height)
