@@ -10,6 +10,11 @@ import "components"
 App {
     id: app
 
+    Component.onCompleted: {
+        mainController.setFullscreen()
+        showFullScreen()
+    }
+
     onInitTheme: {
         Theme.colors.tintColor = "#34495e"
         Theme.colors.textColor = "#d8efc9"

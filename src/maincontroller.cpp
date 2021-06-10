@@ -6,10 +6,17 @@
 
 #include "maincontroller.h"
 
+#include "androidnatives.h"
+
 MainController::MainController(QObject *parent)
     : QObject(parent)
     , m_todoController(m_databaseManager)
 {
+}
+
+void MainController::setFullscreen()
+{
+    nativeSetFullscreen();
 }
 
 TodoController *MainController::todoController()

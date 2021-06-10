@@ -39,6 +39,7 @@ DEPLOYMENTFOLDERS += assetsFolder
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    src/androidnatives.cpp \
     src/controllers/todocontroller.cpp \
     src/database/abstractdao.cpp \
     src/database/databasemanager.cpp \
@@ -48,6 +49,7 @@ SOURCES += main.cpp \
     src/models/todomodel.cpp
 
 HEADERS += \
+    src/androidnatives.h \
     src/controllers/todocontroller.h \
     src/database/abstractdao.h \
     src/database/databasemanager.h \
@@ -63,6 +65,7 @@ FELGO_PLUGINS += admob
 android {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
     OTHER_FILES += android/AndroidManifest.xml       android/build.gradle
+    QT += androidextras
 }
 
 ios {

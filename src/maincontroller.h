@@ -19,6 +19,8 @@ class MainController : public QObject
 public:
     explicit MainController(QObject *parent = nullptr);
 
+    Q_INVOKABLE void setFullscreen();
+
     TodoController *todoController();
 
 private:
