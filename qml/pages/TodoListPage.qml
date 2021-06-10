@@ -56,9 +56,9 @@ Page {
         Rectangle {
             width: listView.width
             height: Math.max(listView.height, parent.height)
-            opacity: 0.2
+            opacity: listView.currentIndex > -1 ? 0.2 : 0
             color: "black"
-            visible: listView.currentIndex > -1
+            visible: opacity > 0
             parent: listView.contentItem
 
             MouseArea {
@@ -69,6 +69,12 @@ Page {
                     }
                     listView.currentItem.onDeselected()
                     listView.currentIndex = -1
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 100
                 }
             }
         }
