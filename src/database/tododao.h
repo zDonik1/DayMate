@@ -7,12 +7,14 @@
 #pragma once
 
 #include <QUuid>
+#include <QColor>
 
 #include "abstractdao.h"
 
 struct Todo {
     QUuid uuid;
     QString text;
+    QColor color;
 };
 
 class TodoDao : public AbstractDao

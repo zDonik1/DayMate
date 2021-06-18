@@ -18,7 +18,8 @@ TodoDao::TodoDao()
     if (!database.tables().contains(TABLE)) {
         executeQuery(QString("create table %1 ("
                              "uuid text primary key," // id is a uuid
-                             "todo text"
+                             "todo text,"
+                             "color text"
                              ")")
                      .arg(TABLE));
     }
@@ -27,16 +28,16 @@ TodoDao::TodoDao()
 Todo TodoDao::add(const Todo &todo) const
 {
     const auto uuid = QUuid::createUuid();
-    auto success = executeQuery(QString("insert into %1 (uuid, todo) values('%2', '%3')")
+    auto success = executeQuery(QString("insert into %1 (uuid, todo, color) values('%2', '%3', '%4')")
                                 .arg(TABLE, uuid.toString(QUuid::WithoutBraces),
-                                     todo.text)).first;
-    return success ? Todo{ uuid, todo.text } : Todo{};
+                                     todo.text, todo.color.name(QColor::HexRgb))).first;
+    return success ? Todo{ uuid, todo.text, todo.color } : Todo{};
 }
 
 bool TodoDao::edit(const Todo &todo) const
 {
-    return executeQuery(QString("update %1 set todo='%2' where uuid='%3'")
-                        .arg(TABLE, todo.text,
+    return executeQuery(QString("update %1 set todo='%2', color='%3' where uuid='%4'")
+                        .arg(TABLE, todo.text, todo.color.name(QColor::HexRgb),
                              todo.uuid.toString(QUuid::WithoutBraces))).first;
 }
 
@@ -56,6 +57,7 @@ QList<Todo> TodoDao::get() const
         Todo todo;
         todo.uuid = query.value(0).toString();
         todo.text = query.value(1).toString();
+        todo.color.setNamedColor(query.value(2).toString());
         todos.push_back(std::move(todo));
     }
     return todos;
