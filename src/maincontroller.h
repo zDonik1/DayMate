@@ -25,7 +25,6 @@ public:
 
 private:
     DatabaseManager m_databaseManager;
-
     TodoController m_todoController;
 };
 

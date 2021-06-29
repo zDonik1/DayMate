@@ -16,7 +16,9 @@ MainController::MainController(QObject *parent)
 
 void MainController::setFullscreen()
 {
+#ifdef Q_OS_ANDROID
     nativeSetFullscreen();
+#endif
 }
 
 TodoController *MainController::todoController()
