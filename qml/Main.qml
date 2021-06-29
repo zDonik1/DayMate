@@ -10,6 +10,10 @@ import "components"
 App {
     id: app
 
+    function setAlpha(color, alpha) {
+        return Qt.hsla(color.hslHue, color.hslSaturation, color.hslLightness, alpha)
+    }
+
     Component.onCompleted: {
         mainController.setFullscreen()
         showFullScreen()
@@ -18,7 +22,7 @@ App {
     onInitTheme: {
         Theme.colors.tintColor = "#34495e"
         Theme.colors.textColor = "#d8efc9"
-        Theme.colors.secondaryTextColor = "#a2acad"
+        Theme.colors.secondaryTextColor = "gray"
         Theme.colors.backgroundColor = "#2c3e50"
         Theme.colors.secondaryBackgroundColor = "#34495e"
         Theme.colors.inputCursorColor = "#a2acad"
@@ -31,7 +35,12 @@ App {
 
         onAddTodo: mainController.todoController.addTodo()
         onEditTodo: mainController.todoController.editTodo(index, text)
+        onEditTodoColor: mainController.todoController.editColor(todoIndex, colorIndex)
         onRemoveTodo: mainController.todoController.removeTodo(index)
+
+        onSetColorInColorPicker:
+            mainController.todoController.fullColorModel.currentColor = color
+        onSelectColorGroup: mainController.todoController.selectColorGroup(index)
     }
 
     // view
@@ -45,10 +54,27 @@ App {
             icon: IconType.list
 
             NavigationStack {
-                navigationBar.rightBarItem: IconButtonBarItem {
-                    icon: IconType.plus
+                navigationBar.rightBarItem: NavigationBarRow {
+                    ColorButton {
+                        source: mainController.todoController.activeColorModel.currentIndex === 0
+                                ? Qt.resolvedUrl("../assets/four_colors.png")
+                                : selectedSource
+                        color: mainController.todoController.activeColorModel.currentColor
 
-                    onClicked: todoListPage.addTodo()
+                        onClicked: colorPickerPopup.open()
+
+                        ColorPickerPopup {
+                            id: colorPickerPopup
+                            x: (parent.width - width) / 2
+                            y: dp(5)
+                        }
+                    }
+
+                    IconButtonBarItem {
+                        icon: IconType.plus
+
+                        onClicked: todoListPage.addTodo()
+                    }
                 }
 
                 splitView: tablet // use side-by-side view on tablets

@@ -16,9 +16,9 @@ class TodoModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit TodoModel(const TodoDao &todoDao, QObject *parent = nullptr);
+    explicit TodoModel(QObject *parent = nullptr);
 
-    void setupModel();
+    void setupModel(QList<Todo> todos);
     void add(const Todo &todo);
     void remove(int index);
 
@@ -32,7 +32,6 @@ private:
     int convertReverseIndex(int index) const;
 
 private:
-    const TodoDao &m_todoDao;
     QList<Todo> m_todos;
 };
 

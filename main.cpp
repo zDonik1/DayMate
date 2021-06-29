@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableType<TodoModel>("Models", 1, 0, "TodoModel",
                                           "TodoModel is created in C++");
+    qmlRegisterUncreatableType<ColorModel>("Models", 1, 0, "ColorModel",
+                                           "ColorModel is created in C++");
 
     // application
     QApplication app(argc, argv);

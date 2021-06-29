@@ -10,11 +10,14 @@
 #include <QStringList>
 #include <QVariant>
 
+#include <globals.h>
+
 static constexpr auto TABLE = "todo";
 
 TodoDao::TodoDao()
 {
     auto database = QSqlDatabase::database();
+
     if (!database.tables().contains(TABLE)) {
         executeQuery(QString("create table %1 ("
                              "uuid text primary key," // id is a uuid
@@ -22,6 +25,9 @@ TodoDao::TodoDao()
                              "color text"
                              ")")
                      .arg(TABLE));
+    } else if (!executeQuery(QString("select color from %1").arg(TABLE)).first) {
+        executeQuery(QString("alter table %1 add color text default '%2'")
+                     .arg(TABLE, TODO_COLORS[0].name(QColor::HexRgb)));
     }
 }
 
@@ -61,4 +67,33 @@ QList<Todo> TodoDao::get() const
         todos.push_back(std::move(todo));
     }
     return todos;
+}
+
+QList<Todo> TodoDao::getColoredTodos(const QColor &color) const
+{
+    auto [success, query] = executeQuery(QString("select * from %1 where color='%2'")
+            .arg(TABLE, color.name(QColor::HexRgb)));
+    if (!success) return {};
+
+    QList<Todo> todos;
+    while (query.next()) {
+        Todo todo;
+        todo.uuid = query.value(0).toString();
+        todo.text = query.value(1).toString();
+        todo.color = color;
+        todos.push_back(std::move(todo));
+    }
+    return todos;
+}
+
+QList<QColor> TodoDao::getColors() const
+{
+    auto [success, query] = executeQuery(QString("select distinct color from %1").arg(TABLE));
+    if (!success) return {};
+
+    QList<QColor> colors;
+    while (query.next()) {
+        colors.push_back(query.value(0).value<QColor>());
+    }
+    return colors;
 }

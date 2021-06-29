@@ -45,6 +45,7 @@ SOURCES += main.cpp \
     src/database/tododao.cpp \
     src/globals.cpp \
     src/maincontroller.cpp \
+    src/models/colormodel.cpp \
     src/models/todomodel.cpp
 
 HEADERS += \
@@ -54,6 +55,7 @@ HEADERS += \
     src/database/tododao.h \
     src/globals.h \
     src/maincontroller.h \
+    src/models/colormodel.h \
     src/models/todomodel.h
 
 INCLUDEPATH += src

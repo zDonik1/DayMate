@@ -13,6 +13,8 @@ Page {
         }
     }
 
+    property alias listView: listView
+
     id: page
     title: qsTr("Todo List")
 
@@ -64,9 +66,7 @@ Page {
             MouseArea {
                 anchors.fill: parent
                 onPressed: {
-                    if (listView.itemBeingAdded) {
-                        listView.itemBeingAdded = false
-                    }
+                    listView.itemBeingAdded = false
                     listView.currentItem.onDeselected()
                     listView.currentIndex = -1
                 }
@@ -78,5 +78,10 @@ Page {
                 }
             }
         }
+    }
+
+    ColorPickerModal {
+        id: colorModal
+        pushBackContent: navigation
     }
 }

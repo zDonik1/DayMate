@@ -19,8 +19,8 @@ FocusScope {
 
     id: root
     height: background.height + spacing
-    width: parent.width * 0.9
-    x: (parent.width - width) / 2
+    width: listView.width * 0.9
+    x: (listView.width - width) / 2
     z: selected ? 1 : -1
     scale: selected ? 1.03 : 1
 
@@ -38,9 +38,10 @@ FocusScope {
     StylizedBackground {
         id: background
         anchors.centerIn: parent
-        height: appTextEdit.contentHeight + verticalMargins * 2
+        height: appTextEdit.height + verticalMargins * 2
         width: parent.width
         elevated: selected
+        background.color: decoration
     }
 
     MouseArea {
@@ -53,33 +54,63 @@ FocusScope {
         id: appTextEdit
         anchors {
             left: parent.left
-            leftMargin: parent.width * 0.075
-            right: button.left
-            rightMargin: button.visible ? 0 : parent.width * 0.075
+            leftMargin: parent.width * 0.05
+            right: buttonRow.left
+            rightMargin: buttonRow.visible ? 0 : parent.width * 0.05
             verticalCenter: parent.verticalCenter
         }
+        height: contentHeight
         font.pixelSize: sp(22)
         wrapMode: Text.Wrap
-        color: Theme.textColor
+        color: Theme.backgroundColor
         placeholderText: qsTr("Write todo here...")
         placeholderColor: Theme.secondaryTextColor
         enabled: selected
     }
 
-    AppButton {
-        id: button
-        anchors.right: parent.right
-        icon: IconType.check
-        height: parent.height
-        width: selected && !appTextEdit.activeFocus ? dp(50) : 0
-        visible: width > 0
-        flat: true
-        textColor: Qt.lighter("green")
-        iconSize: sp(20)
+    Row {
+        property real __originalWidth
 
-        onClicked: {
-            listView.currentIndex = -1
-            logic.removeTodo(index)
+        id: buttonRow
+        anchors {
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+        }
+        visible: width > 0
+        spacing: -dp(10)
+
+        Component.onCompleted: {
+            __originalWidth = width
+            width = Qt.binding(function() {
+                return selected && !appTextEdit.activeFocus ? __originalWidth : 0
+            })
+        }
+
+        ColorButton {
+            width: dp(48)
+            height: width
+            source: Qt.resolvedUrl("../../assets/four_colors.png")
+
+            onClicked: {
+                logic.setColorInColorPicker(decoration)
+                colorModal.open()
+            }
+        }
+
+        CustomIconButton {
+            width: dp(48)
+            height: width
+            icon: IconType.check
+            color: mainController.todoController.fullColorModel.colorIndex(decoration) === 0
+                   || mainController.todoController.fullColorModel.colorIndex(decoration) === 1
+                   || mainController.todoController.fullColorModel.colorIndex(decoration) === 3
+                   ? Qt.lighter("green") : "green"
+            size: sp(20)
+
+            onClicked: {
+                listView.currentIndex = -1
+                logic.removeTodo(index)
+            }
         }
     }
 }

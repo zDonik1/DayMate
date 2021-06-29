@@ -6,17 +6,15 @@
 
 #include "todomodel.h"
 
-TodoModel::TodoModel(const TodoDao &todoDao, QObject *parent)
+TodoModel::TodoModel(QObject *parent)
     : QAbstractListModel(parent)
-    , m_todoDao(todoDao)
 {
-    setupModel();
 }
 
-void TodoModel::setupModel()
+void TodoModel::setupModel(QList<Todo> todos)
 {
     beginResetModel();
-    m_todos = m_todoDao.get();
+    m_todos = todos;
     endResetModel();
 }
 
@@ -51,6 +49,8 @@ QVariant TodoModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
         return m_todos[convertReverseIndex(index.row())].text;
+    case Qt::DecorationRole:
+        return m_todos[convertReverseIndex(index.row())].color;
     }
     return {};
 }
@@ -62,6 +62,9 @@ bool TodoModel::setData(const QModelIndex &index, const QVariant &value, int rol
     switch (role) {
     case Qt::DisplayRole:
         m_todos[convertReverseIndex(index.row())].text = value.toString();
+        break;
+    case Qt::DecorationRole:
+        m_todos[convertReverseIndex(index.row())].color = value.value<QColor>();
         break;
     default:
         return false;
