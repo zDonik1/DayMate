@@ -22,29 +22,41 @@ TodoDao::TodoDao()
         executeQuery(QString("create table %1 ("
                              "uuid text primary key," // id is a uuid
                              "todo text,"
-                             "color text"
+                             "color text,"
+                             "order_rank integer"
                              ")")
                      .arg(TABLE));
     } else if (!executeQuery(QString("select color from %1").arg(TABLE)).first) {
         executeQuery(QString("alter table %1 add color text default '%2'")
                      .arg(TABLE, TODO_COLORS[0].name(QColor::HexRgb)));
+    } else if (!executeQuery(QString("select order_rank from %1").arg(TABLE)).first) {
+        executeQuery(QString("alter table %1 add order_rank integer").arg(TABLE));
+        auto todos = get();
+        for (int i = 0; i < todos.size(); ++i) {
+            auto todo = todos[todos.size() - i - 1];
+            todo.order = i;
+            edit(todo);
+        }
     }
 }
 
 Todo TodoDao::add(const Todo &todo) const
 {
     const auto uuid = QUuid::createUuid();
-    auto success = executeQuery(QString("insert into %1 (uuid, todo, color) values('%2', '%3', '%4')")
+    auto success = executeQuery(QString("insert into %1 (uuid, todo, color, order_rank) "
+                                        "values('%2', '%3', '%4', %5)")
                                 .arg(TABLE, uuid.toString(QUuid::WithoutBraces),
-                                     todo.text, todo.color.name(QColor::HexRgb))).first;
-    return success ? Todo{ uuid, todo.text, todo.color } : Todo{};
+                                     todo.text, todo.color.name(QColor::HexRgb))
+                                .arg(todo.order)).first;
+    return success ? Todo{ uuid, todo.text, todo.color, todo.order } : Todo{};
 }
 
 bool TodoDao::edit(const Todo &todo) const
 {
-    return executeQuery(QString("update %1 set todo='%2', color='%3' where uuid='%4'")
+    return executeQuery(QString("update %1 set todo='%2', color='%3', order_rank=%5 where uuid='%4'")
                         .arg(TABLE, todo.text, todo.color.name(QColor::HexRgb),
-                             todo.uuid.toString(QUuid::WithoutBraces))).first;
+                             todo.uuid.toString(QUuid::WithoutBraces))
+                        .arg(todo.order)).first;
 }
 
 bool TodoDao::remove(const QUuid &uuid) const
@@ -55,7 +67,8 @@ bool TodoDao::remove(const QUuid &uuid) const
 
 QList<Todo> TodoDao::get() const
 {
-    auto [success, query] = executeQuery(QString("select * from %1").arg(TABLE));
+    auto [success, query] = executeQuery(QString("select * from %1 order by order_rank desc")
+            .arg(TABLE));
     if (!success) return {};
 
     QList<Todo> todos;
@@ -64,6 +77,7 @@ QList<Todo> TodoDao::get() const
         todo.uuid = query.value(0).toString();
         todo.text = query.value(1).toString();
         todo.color.setNamedColor(query.value(2).toString());
+        todo.order = query.value(3).toInt();
         todos.push_back(std::move(todo));
     }
     return todos;
@@ -71,8 +85,8 @@ QList<Todo> TodoDao::get() const
 
 QList<Todo> TodoDao::getColoredTodos(const QColor &color) const
 {
-    auto [success, query] = executeQuery(QString("select * from %1 where color='%2'")
-            .arg(TABLE, color.name(QColor::HexRgb)));
+    auto [success, query] = executeQuery(QString("select * from %1 where color='%2' "
+            "order by order_rank desc").arg(TABLE, color.name(QColor::HexRgb)));
     if (!success) return {};
 
     QList<Todo> todos;
@@ -81,6 +95,7 @@ QList<Todo> TodoDao::getColoredTodos(const QColor &color) const
         todo.uuid = query.value(0).toString();
         todo.text = query.value(1).toString();
         todo.color = color;
+        todo.order = query.value(3).toInt();
         todos.push_back(std::move(todo));
     }
     return todos;

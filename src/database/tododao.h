@@ -15,6 +15,7 @@ struct Todo {
     QUuid uuid;
     QString text;
     QColor color;
+    int order;
 
     Todo()
     {
@@ -25,10 +26,11 @@ struct Todo {
     {
     }
 
-    Todo(QUuid l_uuid, QString l_text, QColor l_color)
+    Todo(QUuid l_uuid, QString l_text, QColor l_color, int l_order)
         : uuid(l_uuid)
         , text(l_text)
         , color(l_color)
+        , order(l_order)
     {
     }
 };

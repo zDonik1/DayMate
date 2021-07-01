@@ -67,7 +67,7 @@ void TodoController::editTodo(int index, QString todoText)
 
     // editing in database
     const auto &todo = m_todoModel.get(index);
-    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todoText, todo.color });
+    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todoText, todo.color, todo.order});
 
     // editing in model
     m_todoModel.setData(m_todoModel.index(index), todoText, Qt::DisplayRole);
@@ -78,7 +78,7 @@ void TodoController::editColor(int todoIndex, int colorIndex)
     // editing in database
     const auto &todo = m_todoModel.get(todoIndex);
     const auto color = m_fullColorModel.get(colorIndex);
-    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todo.text, color });
+    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todo.text, color, todo.order });
 
     // editing in model
     if (m_activeColorModel.currentIndex() == 0) { // if "all colors"
