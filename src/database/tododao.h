@@ -46,6 +46,7 @@ public:
     bool remove(const QUuid &uuid) const;
     QList<Todo> get() const;
     QList<Todo> getColoredTodos(const QColor &color) const;
+    QList<Todo> getInRange(int begin, int end) const;
     QList<QColor> getColors() const;
 };
 

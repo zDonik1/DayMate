@@ -67,20 +67,7 @@ bool TodoDao::remove(const QUuid &uuid) const
 
 QList<Todo> TodoDao::get() const
 {
-    auto [success, query] = executeQuery(QString("select * from %1 order by order_rank desc")
-            .arg(TABLE));
-    if (!success) return {};
-
-    QList<Todo> todos;
-    while (query.next()) {
-        Todo todo;
-        todo.uuid = query.value(0).toString();
-        todo.text = query.value(1).toString();
-        todo.color.setNamedColor(query.value(2).toString());
-        todo.order = query.value(3).toInt();
-        todos.push_back(std::move(todo));
-    }
-    return todos;
+    return getInRange(0, -1);
 }
 
 QList<Todo> TodoDao::getColoredTodos(const QColor &color) const
@@ -95,6 +82,28 @@ QList<Todo> TodoDao::getColoredTodos(const QColor &color) const
         todo.uuid = query.value(0).toString();
         todo.text = query.value(1).toString();
         todo.color = color;
+        todo.order = query.value(3).toInt();
+        todos.push_back(std::move(todo));
+    }
+    return todos;
+}
+
+QList<Todo> TodoDao::getInRange(int begin, int end) const
+{
+    auto queryString = QString("select * from %1 where order_rank >= %2")
+            .arg(TABLE).arg(begin);
+    if (end >= 0) queryString.append(QString(" and order_rank < %1").arg(end));
+    queryString.append(" order by order_rank desc");
+
+    auto [success, query] = executeQuery(queryString);
+    if (!success) return {};
+
+    QList<Todo> todos;
+    while (query.next()) {
+        Todo todo;
+        todo.uuid = query.value(0).toString();
+        todo.text = query.value(1).toString();
+        todo.color.setNamedColor(query.value(2).toString());
         todo.order = query.value(3).toInt();
         todos.push_back(std::move(todo));
     }
