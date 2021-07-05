@@ -45,11 +45,12 @@ ColorModel *TodoController::fullColorModel()
 
 void TodoController::addTodo()
 {
+    const auto todoDao = m_databaseManager.getDao<TodoDao>();
+
     // adding into database
     const auto color = m_activeColorModel.currentIndex() == 0
             ? m_fullColorModel.get(0) : m_activeColorModel.currentColor();
-    const auto newTodo = m_databaseManager.getDao<TodoDao>()
-            .add({ color });
+    const auto newTodo = todoDao.add({ color, todoDao.getLastOrder() + 1 });
 
     // adding to model
     m_todoModel.add(newTodo);
@@ -67,7 +68,7 @@ void TodoController::editTodo(int index, QString todoText)
 
     // editing in database
     const auto &todo = m_todoModel.get(index);
-    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todoText, todo.color, todo.order });
+    m_databaseManager.getDao<TodoDao>().update({ todo.uuid, todoText, todo.color, todo.order });
 
     // editing in model
     m_todoModel.setData(m_todoModel.index(index), todoText, Qt::DisplayRole);
@@ -78,7 +79,7 @@ void TodoController::editColor(int todoIndex, int colorIndex)
     // editing in database
     const auto &todo = m_todoModel.get(todoIndex);
     const auto color = m_fullColorModel.get(colorIndex);
-    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todo.text, color, todo.order });
+    m_databaseManager.getDao<TodoDao>().update({ todo.uuid, todo.text, color, todo.order });
 
     // editing in model
     if (m_activeColorModel.currentIndex() == 0) { // if "all colors"
@@ -112,29 +113,15 @@ void TodoController::moveTodo(int prevIndex, int nextIndex)
     if (prevIndex == nextIndex) return;
 
     const auto &todoDao = m_databaseManager.getDao<TodoDao>();
-    bool down = prevIndex < nextIndex;
+    bool down = prevIndex < nextIndex; // moving todo down
 
-    // getting order of prev and next items (order becomes true index in list of all todos)
-    auto beginOrder = m_todoModel.get(prevIndex).order;
-    auto endOrder = m_todoModel.get(nextIndex).order;
-    if (!down) std::swap(beginOrder, endOrder);
+    // order is the true index in list of all todos (endOrder is inclusive)
+    auto [beginOrder, endOrder] = getOrdersFromIndices(prevIndex, nextIndex);
 
-    { // updating database
-        // getting range of todos to change and editing todo to be moved in database
-        // todos are in returned sorted in reverse order ->
-        auto todos = todoDao.getInRange(beginOrder, endOrder + 1);
-        auto &todoToBeMoved = down ? todos.back() : todos.front();
-        todoToBeMoved.order = down ? endOrder : beginOrder;
-        todoDao.edit(todoToBeMoved);
-
-        // editing the rest of displaced todos in database
-        const auto beginItr = todos.begin() + (down ? 0 : 1);
-        const auto endItr = todos.end() - (down ? 1 : 0);
-        std::for_each(beginItr, endItr, [down, &todoDao](auto &todo) {
-            todo.order += (down ? -1 : 1);
-            todoDao.edit(todo);
-        });
-    }
+    // updating database
+    auto todos = todoDao.getListInRange(beginOrder, endOrder + 1); // endOrder should be exclusive
+    moveChosenTodo(todos, beginOrder, endOrder, down);
+    moveDisplacedTodos(todos, down);
 
     // editing in model without updating
     if (m_activeColorModel.currentIndex() == 0) { // if "all colors"
@@ -167,4 +154,31 @@ void TodoController::updateActiveColorModel()
     for (auto &color : todoUsedColors) {
         m_activeColorModel.activate(m_fullColorModel.colorIndex(color) + 1);
     }
+}
+
+std::pair<int, int> TodoController::getOrdersFromIndices(int prevIndex, int nextIndex)
+{
+    auto beginOrder = m_todoModel.get(prevIndex).order;
+    auto endOrder = m_todoModel.get(nextIndex).order;
+    if (beginOrder > endOrder) std::swap(beginOrder, endOrder);
+    return { beginOrder, endOrder };
+}
+
+void TodoController::moveChosenTodo(QList<Todo> &todos, int beginOrder, int endOrder, bool down)
+{
+    const auto &todoDao = m_databaseManager.getDao<TodoDao>();
+    auto &todoToBeMoved = down ? todos.back() : todos.front();
+    todoToBeMoved.order = down ? beginOrder : endOrder;
+    todoDao.update(todoToBeMoved);
+}
+
+void TodoController::moveDisplacedTodos(QList<Todo> &todos, bool down)
+{
+    const auto todoDao = m_databaseManager.getDao<TodoDao>();
+    const auto beginItr = todos.begin() + (down ? 0 : 1);
+    const auto endItr = todos.end() - (down ? 1 : 0);
+    std::for_each(beginItr, endItr, [down, &todoDao](auto &todo) {
+        todo.order += (down ? 1 : -1);
+        todoDao.update(todo);
+    });
 }

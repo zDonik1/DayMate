@@ -21,8 +21,9 @@ struct Todo {
     {
     }
 
-    Todo(QColor l_color)
+    Todo(QColor l_color, int l_order)
         : color(l_color)
+        , order(l_order)
     {
     }
 
@@ -42,11 +43,15 @@ public:
 
     // returns new todo with added uuid
     Todo add(const Todo &todo) const;
-    bool edit(const Todo &todo) const;
+    bool update(const Todo &todo) const;
     bool remove(const QUuid &uuid) const;
     QList<Todo> get() const;
     QList<Todo> getColoredTodos(const QColor &color) const;
-    QList<Todo> getInRange(int begin, int end) const;
+    QList<Todo> getListInRange(int begin, int end) const;
+    int getLastOrder() const;
     QList<QColor> getColors() const;
+
+private:
+    QList<Todo> getTodosFromQuery(QSqlQuery &query) const;
 };
 

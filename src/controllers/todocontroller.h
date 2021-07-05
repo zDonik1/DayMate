@@ -38,6 +38,9 @@ public slots:
 
 private:
     void updateActiveColorModel();
+    std::pair<int, int> getOrdersFromIndices(int prevIndex, int nextIndex);
+    void moveChosenTodo(QList<Todo> &todos, int beginOrder, int endOrder, bool down);
+    void moveDisplacedTodos(QList<Todo> &todos, bool down);
 
 private:
     DatabaseManager &m_databaseManager;

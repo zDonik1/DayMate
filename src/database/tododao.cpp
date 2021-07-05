@@ -35,7 +35,7 @@ TodoDao::TodoDao()
         for (int i = 0; i < todos.size(); ++i) {
             auto todo = todos[todos.size() - i - 1];
             todo.order = i;
-            edit(todo);
+            update(todo);
         }
     }
 }
@@ -51,7 +51,7 @@ Todo TodoDao::add(const Todo &todo) const
     return success ? Todo{ uuid, todo.text, todo.color, todo.order } : Todo{};
 }
 
-bool TodoDao::edit(const Todo &todo) const
+bool TodoDao::update(const Todo &todo) const
 {
     return executeQuery(QString("update %1 set todo='%2', color='%3', order_rank=%5 where uuid='%4'")
                         .arg(TABLE, todo.text, todo.color.name(QColor::HexRgb),
@@ -67,47 +67,41 @@ bool TodoDao::remove(const QUuid &uuid) const
 
 QList<Todo> TodoDao::get() const
 {
-    return getInRange(0, -1);
+    return getListInRange(0, -1);
 }
 
 QList<Todo> TodoDao::getColoredTodos(const QColor &color) const
 {
     auto [success, query] = executeQuery(QString("select * from %1 where color='%2' "
-            "order by order_rank desc").arg(TABLE, color.name(QColor::HexRgb)));
+            "order by order_rank asc").arg(TABLE, color.name(QColor::HexRgb)));
     if (!success) return {};
 
-    QList<Todo> todos;
-    while (query.next()) {
-        Todo todo;
-        todo.uuid = query.value(0).toString();
-        todo.text = query.value(1).toString();
-        todo.color = color;
-        todo.order = query.value(3).toInt();
-        todos.push_back(std::move(todo));
-    }
-    return todos;
+    return getTodosFromQuery(query);
 }
 
-QList<Todo> TodoDao::getInRange(int begin, int end) const
+QList<Todo> TodoDao::getListInRange(int begin, int end) const
 {
     auto queryString = QString("select * from %1 where order_rank >= %2")
             .arg(TABLE).arg(begin);
     if (end >= 0) queryString.append(QString(" and order_rank < %1").arg(end));
-    queryString.append(" order by order_rank desc");
+    queryString.append(" order by order_rank asc");
 
     auto [success, query] = executeQuery(queryString);
     if (!success) return {};
 
-    QList<Todo> todos;
-    while (query.next()) {
-        Todo todo;
-        todo.uuid = query.value(0).toString();
-        todo.text = query.value(1).toString();
-        todo.color.setNamedColor(query.value(2).toString());
-        todo.order = query.value(3).toInt();
-        todos.push_back(std::move(todo));
-    }
-    return todos;
+    return getTodosFromQuery(query);
+}
+
+int TodoDao::getLastOrder() const
+{
+    auto [success, query] = executeQuery(
+            QString("select order_rank from %1 order by order_rank desc").arg(TABLE));
+    if (!success) return {};
+
+    if (query.next())
+        return query.value(0).toInt();
+    else
+        return -1;
 }
 
 QList<QColor> TodoDao::getColors() const
@@ -120,4 +114,18 @@ QList<QColor> TodoDao::getColors() const
         colors.push_back(query.value(0).value<QColor>());
     }
     return colors;
+}
+
+QList<Todo> TodoDao::getTodosFromQuery(QSqlQuery &query) const
+{
+    QList<Todo> todos;
+    while (query.next()) {
+        Todo todo;
+        todo.uuid = query.value(0).toString();
+        todo.text = query.value(1).toString();
+        todo.color.setNamedColor(query.value(2).toString());
+        todo.order = query.value(3).toInt();
+        todos.push_back(std::move(todo));
+    }
+    return todos;
 }
