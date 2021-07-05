@@ -67,7 +67,7 @@ void TodoController::editTodo(int index, QString todoText)
 
     // editing in database
     const auto &todo = m_todoModel.get(index);
-    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todoText, todo.color, todo.order});
+    m_databaseManager.getDao<TodoDao>().edit({ todo.uuid, todoText, todo.color, todo.order });
 
     // editing in model
     m_todoModel.setData(m_todoModel.index(index), todoText, Qt::DisplayRole);
@@ -93,6 +93,41 @@ void TodoController::editColor(int todoIndex, int colorIndex)
 
     // update popup color picker
     updateActiveColorModel();
+}
+
+void TodoController::editOrder(int prevIndex, int nextIndex)
+{
+    const auto &todoDao = m_databaseManager.getDao<TodoDao>();
+    bool down = prevIndex < nextIndex;
+
+    // getting order of prev and next items (order becomes true index in list of all todos)
+    auto beginOrder = m_todoModel.get(prevIndex).order;
+    auto endOrder = m_todoModel.get(nextIndex).order;
+    if (!down) std::swap(beginOrder, endOrder);
+
+    { // updating database
+        // getting range of todos to change and editing todo to be moved in database
+        // todos are in returned sorted in reverse order ->
+        auto todos = todoDao.getInRange(beginOrder, endOrder + 1);
+        auto &todoToBeMoved = down ? todos.back() : todos.front();
+        todoToBeMoved.order = down ? endOrder : beginOrder;
+        todoDao.edit(todoToBeMoved);
+
+        // editing the rest of displaced todos in database
+        const auto beginItr = todos.begin() + (down ? 0 : 1);
+        const auto endItr = todos.end() - (down ? 1 : 0);
+        std::for_each(beginItr, endItr, [down, &todoDao](auto &todo) {
+            todo.order += (down ? -1 : 1);
+            todoDao.edit(todo);
+        });
+    }
+
+    // editing in model without updating
+    if (m_activeColorModel.currentIndex() == 0) { // if "all colors"
+        m_todoModel.setupModelNoUpdate(todoDao.get());
+    } else {
+        m_todoModel.setupModelNoUpdate(todoDao.getColoredTodos(m_activeColorModel.currentColor()));
+    }
 }
 
 void TodoController::removeTodo(int index)

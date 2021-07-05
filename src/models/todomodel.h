@@ -19,6 +19,7 @@ public:
     explicit TodoModel(QObject *parent = nullptr);
 
     void setupModel(QList<Todo> todos);
+    void setupModelNoUpdate(QList<Todo> todos);
     void add(const Todo &todo);
     void remove(int index);
 

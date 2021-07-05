@@ -14,8 +14,13 @@ TodoModel::TodoModel(QObject *parent)
 void TodoModel::setupModel(QList<Todo> todos)
 {
     beginResetModel();
-    m_todos = todos;
+    setupModelNoUpdate(std::move(todos));
     endResetModel();
+}
+
+void TodoModel::setupModelNoUpdate(QList<Todo> todos)
+{
+    m_todos = todos;
 }
 
 void TodoModel::add(const Todo &todo)
