@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
+import QtQml.Models 2.12
 
 import Felgo 3.0
 
@@ -18,20 +19,33 @@ Page {
     id: page
     title: qsTr("Todo List")
 
+    DelegateModel {
+        id: todoDelegateModel
+        model: mainController.todoController.todoModel
+        delegate: TodoDelegate {
+            text: display
+            selected: ListView.isCurrentItem
+            itemsIndex: DelegateModel.itemsIndex
+        }
+    }
+
     AppListView {
+        property bool firstTime: true
         property bool itemBeingAdded: false
 
         id: listView
         anchors.fill: parent
-        model: mainController.todoController.todoModel
         spacing: -dp(5)
+        model: todoDelegateModel
         currentIndex: -1
         boundsBehavior: Flickable.StopAtBounds
         scrollIndicatorVisible: true
-        delegate: TodoDelegate {
-            text: display
-            selected: ListView.isCurrentItem
-        }
+
+        // DelegateModel uses "add" mechanic to setup model, so last element is "selected"
+        onCurrentIndexChanged: if (firstTime && currentIndex === count - 1) {
+                                   firstTime = false
+                                   currentIndex = -1
+                               }
 
         // transitions
         add: Transition {

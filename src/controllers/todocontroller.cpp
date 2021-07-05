@@ -95,8 +95,22 @@ void TodoController::editColor(int todoIndex, int colorIndex)
     updateActiveColorModel();
 }
 
-void TodoController::editOrder(int prevIndex, int nextIndex)
+void TodoController::removeTodo(int index)
 {
+    // removing in database
+    m_databaseManager.getDao<TodoDao>().remove(m_todoModel.get(index).uuid);
+
+    // removing in model
+    m_todoModel.remove(index);
+
+    // update popup color picker
+    updateActiveColorModel();
+}
+
+void TodoController::moveTodo(int prevIndex, int nextIndex)
+{
+    if (prevIndex == nextIndex) return;
+
     const auto &todoDao = m_databaseManager.getDao<TodoDao>();
     bool down = prevIndex < nextIndex;
 
@@ -128,18 +142,6 @@ void TodoController::editOrder(int prevIndex, int nextIndex)
     } else {
         m_todoModel.setupModelNoUpdate(todoDao.getColoredTodos(m_activeColorModel.currentColor()));
     }
-}
-
-void TodoController::removeTodo(int index)
-{
-    // removing in database
-    m_databaseManager.getDao<TodoDao>().remove(m_todoModel.get(index).uuid);
-
-    // removing in model
-    m_todoModel.remove(index);
-
-    // update popup color picker
-    updateActiveColorModel();
 }
 
 void TodoController::selectColorGroup(int index)

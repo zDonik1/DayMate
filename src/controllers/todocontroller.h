@@ -31,8 +31,8 @@ public slots:
     void addTodo();
     void editTodo(int index, QString todoText);
     void editColor(int todoIndex, int colorIndex);
-    void editOrder(int prevIndex, int nextIndex);
     void removeTodo(int index);
+    void moveTodo(int prevIndex, int nextIndex);
 
     void selectColorGroup(int index);
 

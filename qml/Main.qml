@@ -37,6 +37,7 @@ App {
         onEditTodo: mainController.todoController.editTodo(index, text)
         onEditTodoColor: mainController.todoController.editColor(todoIndex, colorIndex)
         onRemoveTodo: mainController.todoController.removeTodo(index)
+        onMoveTodo: mainController.todoController.moveTodo(prevIndex, nextIndex)
 
         onSetColorInColorPicker:
             mainController.todoController.fullColorModel.currentColor = color
