@@ -40,6 +40,8 @@ Page {
     }
 
     DelegateModel {
+        property int countAtStart: -1
+
         id: todoDelegateModel
         model: mainController.todoController.todoModel
         delegate: TodoDelegate {
@@ -47,10 +49,11 @@ Page {
             selected: ListView.isCurrentItem
             itemsIndex: DelegateModel.itemsIndex
         }
+
+        Component.onCompleted: if (count > 0) countAtStart = count
     }
 
     AppListView {
-        property bool firstTime: true
         property bool itemBeingAdded: false
 
         id: listView
@@ -93,8 +96,8 @@ Page {
         ]
 
         // DelegateModel uses "add" mechanic to setup model, so last element is "selected"
-        onCurrentIndexChanged: if (firstTime && currentIndex === count - 1) {
-                                   firstTime = false
+        onCurrentIndexChanged: if (countAtStart !== -1 && currentIndex === count - 1) {
+                                   todoDelegateModel.countAtStart = -1
                                    closeSelectedTodo()
                                }
 
