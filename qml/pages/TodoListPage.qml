@@ -70,21 +70,33 @@ Page {
         // transitions
         add: Transition {
             NumberAnimation {
-                properties: "x"
-                from: page.width
+                property: "x"
+                from: page.width / 2
                 duration: 100
+                easing.type: Easing.OutCubic
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 50
             }
         }
         displaced: Transition {
             NumberAnimation {
-                properties: "y"
+                property: "y"
                 duration: 100
             }
         }
         remove: Transition {
             NumberAnimation {
-                properties: "x"
-                to: page.width
+                property: "x"
+                to: page.width / 2
+                duration: 50
+            }
+            NumberAnimation {
+                property: "opacity"
+                to: 0
                 duration: 50
             }
         }
