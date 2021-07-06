@@ -64,21 +64,24 @@ Page {
         boundsBehavior: Flickable.StopAtBounds
         scrollIndicatorVisible: true
         emptyView.children: [
-            Column {
+            Item {
                 anchors.centerIn: parent
                 width: childrenRect.width
                 height: childrenRect.height
 
                 AppText {
                     id: firstTextOnEmpty
+                    anchors.horizontalCenter: parent.horizontalCenter
                     color: Theme.textColor
                     font.pixelSize: sp(25)
                     text: qsTr("Add your first todo")
                 }
 
                 Row {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    y: firstTextOnEmpty.height
+                    anchors {
+                        top: firstTextOnEmpty.bottom
+                        horizontalCenter: parent.horizontalCenter
+                    }
 
                     AppText {
                         color: Theme.textColor
