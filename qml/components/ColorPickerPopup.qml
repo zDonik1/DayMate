@@ -67,7 +67,7 @@ Popup {
 
                 onClicked: {
                     logic.selectColorGroup(index)
-                    todoListPage.listView.currentIndex = -1
+                    todoListPage.closeSelectedTodo()
                     root.close()
                 }
             }

@@ -8,16 +8,32 @@ import "../components"
 
 Page {
     function addTodo() {
-        if (!listView.itemBeingAdded) {
-            listView.itemBeingAdded = true
-            logic.addTodo()
+        if (listView.itemBeingAdded) {
+            closeSelectedTodo()
         }
+        listView.itemBeingAdded = true
+        logic.addTodo()
+    }
+
+    function closeSelectedTodo() {
+        listView.itemBeingAdded = false
+        listView.currentItem.onDeselected()
+        listView.currentIndex = -1
     }
 
     property alias listView: listView
 
     id: page
     title: qsTr("Todo List")
+
+    Connections {
+        target: app
+
+        function onBackButtonPressedGlobally(event) {
+            event.accepted = true
+            closeSelectedTodo()
+        }
+    }
 
     DelegateModel {
         id: todoDelegateModel
@@ -44,7 +60,7 @@ Page {
         // DelegateModel uses "add" mechanic to setup model, so last element is "selected"
         onCurrentIndexChanged: if (firstTime && currentIndex === count - 1) {
                                    firstTime = false
-                                   currentIndex = -1
+                                   closeSelectedTodo()
                                }
 
         // transitions
@@ -70,6 +86,7 @@ Page {
         }
 
         Rectangle {
+            id: todoModal
             width: listView.width
             height: Math.max(listView.height, parent.height)
             opacity: listView.currentIndex > -1 ? 0.2 : 0
@@ -79,11 +96,7 @@ Page {
 
             MouseArea {
                 anchors.fill: parent
-                onPressed: {
-                    listView.itemBeingAdded = false
-                    listView.currentItem.onDeselected()
-                    listView.currentIndex = -1
-                }
+                onPressed: closeSelectedTodo()
             }
 
             Behavior on opacity {

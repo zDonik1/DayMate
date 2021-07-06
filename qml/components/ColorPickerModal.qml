@@ -39,7 +39,7 @@ AppModal {
                 onClicked: {
                     logic.editTodoColor(listView.currentIndex, index)
                     root.close()
-                    listView.currentIndex = -1
+                    closeSelectedTodo()
                 }
             }
         }

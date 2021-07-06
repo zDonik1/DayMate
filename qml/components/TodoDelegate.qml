@@ -168,7 +168,7 @@ FocusScope {
                 size: sp(20)
 
                 onClicked: {
-                    listView.currentIndex = -1
+                    closeSelectedTodo()
                     logic.removeTodo(index)
                 }
             }
