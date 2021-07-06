@@ -31,11 +31,11 @@ TodoDao::TodoDao()
                      .arg(TABLE, TODO_COLORS[0].name(QColor::HexRgb)));
     } else if (!executeQuery(QString("select order_rank from %1").arg(TABLE)).first) {
         executeQuery(QString("alter table %1 add order_rank integer").arg(TABLE));
-        auto todos = get();
+        auto query = executeQuery(QString("select * from %1").arg(TABLE)).second;
+        auto todos = getTodosFromQuery(query);
         for (int i = 0; i < todos.size(); ++i) {
-            auto todo = todos[todos.size() - i - 1];
-            todo.order = i;
-            update(todo);
+            todos[i].order = i;
+            update(todos.at(i));
         }
     }
 }
