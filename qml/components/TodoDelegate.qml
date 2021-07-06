@@ -122,6 +122,7 @@ FocusScope {
             font.pixelSize: sp(22)
             wrapMode: Text.Wrap
             color: Theme.backgroundColor
+            selectionColor: Theme.inputSelectionColor
             placeholderText: qsTr("Write todo here...")
             placeholderColor: Theme.secondaryTextColor
             enabled: selected
