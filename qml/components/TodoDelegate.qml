@@ -12,6 +12,10 @@ FocusScope {
         }
     }
 
+    function focusOnText() {
+        appTextEdit.forceActiveFocus()
+    }
+
     property bool selected: false
     property alias text: appTextEdit.text
     property int verticalMargins: dp(20)
@@ -23,11 +27,6 @@ FocusScope {
     width: listView.width * 0.9
     x: (listView.width - width) / 2
     z: selected ? 1 : -1
-
-    ListView.onAdd: {
-        appTextEdit.forceActiveFocus()
-        Qt.callLater(function () { listView.currentIndex = index })
-    }
 
 
     // DRAGGING

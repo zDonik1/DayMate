@@ -11,11 +11,15 @@ Page {
         if (listView.itemBeingAdded) {
             closeSelectedTodo()
         }
-        listView.itemBeingAdded = true
         logic.addTodo()
+        listView.itemBeingAdded = true
+        listView.currentIndex = 0
+        listView.currentItem.focusOnText()
     }
 
     function closeSelectedTodo() {
+        if (listView.currentIndex === -1) return
+
         listView.itemBeingAdded = false
         listView.currentItem.onDeselected()
         listView.currentIndex = -1
