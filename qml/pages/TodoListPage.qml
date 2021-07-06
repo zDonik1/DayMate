@@ -60,6 +60,37 @@ Page {
         currentIndex: -1
         boundsBehavior: Flickable.StopAtBounds
         scrollIndicatorVisible: true
+        emptyView.children: [
+            Column {
+                anchors.centerIn: parent
+                width: childrenRect.width
+                height: childrenRect.height
+
+                AppText {
+                    id: firstTextOnEmpty
+                    color: Theme.textColor
+                    font.pixelSize: sp(25)
+                    text: qsTr("Add your first todo")
+                }
+
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: firstTextOnEmpty.height
+
+                    AppText {
+                        color: Theme.textColor
+                        font.pixelSize: sp(25)
+                        text: qsTr("by pressing")
+                    }
+
+                    Icon {
+                        width: dp(35)
+                        height: dp(35)
+                        icon: IconType.plus
+                    }
+                }
+            }
+        ]
 
         // DelegateModel uses "add" mechanic to setup model, so last element is "selected"
         onCurrentIndexChanged: if (firstTime && currentIndex === count - 1) {
